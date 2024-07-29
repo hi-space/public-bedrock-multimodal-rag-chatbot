@@ -1,0 +1,73 @@
+{
+    "settings": {
+        "index": {
+            "knn": true,
+            "knn.space_type": "cosinesimil"
+        },
+        "analysis": {
+            "analyzer": {
+                "nori_analyzer": {
+                    "type": "custom",
+                    "char_filter": ["html_strip"],
+                    "tokenizer": "nori",
+                    "filter": [
+                        "nori_noun_filter"
+                    ]
+                }
+            },
+            "tokenizer": {
+                "nori": {
+                    "decompound_mode": "mixed",
+                    "discard_punctuation": "true",
+                    "type": "nori_tokenizer"
+                }
+            },
+            "filter": {
+                "nori_noun_filter": {
+                    "type": "nori_part_of_speech",
+                    "stoptags": [
+                        "J", "XSV", "E", "IC", "MAJ", "NNB",
+                        "SP", "SSC", "SSO",
+                        "SC", "SE", "XSN", "XSV",
+                        "UNA", "NA", "VCP", "VSV", "VX"
+                    ]
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "vector_field": {
+                "type": "knn_vector",
+                "dimension": 1024
+            },
+            "text": {
+                "type": "text",
+                "analyzer": "nori_analyzer",
+                "search_analyzer": "nori_analyzer"
+            },
+            "metadata": {
+                "properties": {
+                    "id": {
+                        "type": "keyword"
+                    },
+                    "embedType": {
+                        "type": "keyword"
+                    },
+                    "productDisplayName": {
+                        "type": "text"
+                    },
+                    "namekor": {
+                        "type": "text"
+                    },
+                    "thumbnail": {
+                        "type": "keyword"
+                    },
+                    "displayCategories": {
+                        "type": "keyword"
+                    }
+                }
+            }
+        }
+    }
+}
