@@ -152,8 +152,8 @@ class OpenSearchWrapper():
         return res['hits']['hits']
 
         
-    def similarity_search(self, index_name: str, query: str, k: int = 3, is_multimodal=True):
-        vectordb = self.get_vector_store(index_name=index_name, is_multimodal=is_multimodal)
+    def similarity_search(self, query: str, k: int = 3, is_multimodal=True):
+        vectordb = self.get_vector_store(index_name=self.index, is_multimodal=is_multimodal)
         return vectordb.similarity_search_with_score(
             query=query,
             k=k,

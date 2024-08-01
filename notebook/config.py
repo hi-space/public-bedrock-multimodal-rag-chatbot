@@ -20,4 +20,7 @@ class Settings(BaseSettings):
     OPENSEARCH_INDEX_TEXT: str
     OPENSEARCH_INDEX_IMAGE: str
 
+    REDIS_HOST: str
+    REDIS_PORT: str
+
 config = Settings()
