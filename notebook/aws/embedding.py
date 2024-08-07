@@ -12,6 +12,8 @@ class BedrockEmbedding():
         self.bedrock = boto3.client(
             service_name = 'bedrock-runtime',
             region_name = self.region,
+            aws_access_key_id=config.AWS_ACCESS_KEY,
+            aws_secret_access_key=config.AWS_SECRET_KEY,
             config = Config(
                 connect_timeout=120,
                 read_timeout=120,

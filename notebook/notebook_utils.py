@@ -1,5 +1,3 @@
-import base64
-import requests
 import pandas as pd
 from typing import List
 from functools import wraps
