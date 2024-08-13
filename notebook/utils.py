@@ -7,7 +7,7 @@ from io import BytesIO
 def encode_image_base64(img_url):
     '''이미지 데이터를 base64로 인코딩하며, width나 height가 2000을 넘지 않도록 리사이즈'''
     try:
-        response = requests.get(img_url)
+        response = requests.get(img_url, timeout=5)
         image_data = response.content
 
         # 이미지를 열고 리사이즈

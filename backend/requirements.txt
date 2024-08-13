@@ -1,0 +1,20 @@
+colorama
+fastapi
+termcolor
+uvicorn
+aiofiles
+firebase_admin
+opencv-python
+pillow
+python-multipart
+boto3
+opensearch-py
+requests-aws4auth
+langchain==0.2.5
+langchain-community==0.2.5
+langchain-aws
+ipython
+pydantic-settings
+redis
+# pydantic==1.10.15
+# albumentations==1.4.3

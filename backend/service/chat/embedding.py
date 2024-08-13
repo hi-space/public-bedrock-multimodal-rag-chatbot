@@ -1,9 +1,11 @@
 import boto3
 import json
 from botocore.config import Config
+
 from langchain_community.embeddings import BedrockEmbeddings
 
 from config import config
+from common.logger import logger
 
 
 class BedrockEmbedding():
@@ -11,9 +13,9 @@ class BedrockEmbedding():
         self.region = config.BEDROCK_REGION
         self.bedrock = boto3.client(
             service_name = 'bedrock-runtime',
+            aws_access_key_id=config.AWS_ACCESS,
+            aws_secret_access_key=config.AWS_SECRET,
             region_name = self.region,
-            aws_access_key_id=config.AWS_ACCESS_KEY,
-            aws_secret_access_key=config.AWS_SECRET_KEY,
             config = Config(
                 connect_timeout=120,
                 read_timeout=120,
@@ -35,13 +37,14 @@ class BedrockEmbedding():
             model_id = self.textmodalId
         )
     
+    
     '''
     Multimodal Embedding
     '''
     def embedding_multimodal(self, text=None, image=None):
         body = dict()
-        if text is not None: body['inputText'] = text
-        if image is not None: body['inputImage'] = image
+        if text is not None and len(text) != 0: body['inputText'] = text
+        if image is not None and len(image) != 0: body['inputImage'] = image
 
         try:
             res = self.bedrock.invoke_model(
@@ -52,10 +55,10 @@ class BedrockEmbedding():
             )
             return json.loads(res.get("body").read()).get("embedding")
         except Exception as e:
-            print(e)
+            logger.error(e)
             return []
-
-
+        
+        
     '''
     Text Embedding
     '''
