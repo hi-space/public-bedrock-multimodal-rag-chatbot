@@ -1,26 +1,34 @@
-# Multimodal RAG
+# Preprocessing for Multimodal RAG
+
+- [Preprocessing for Multimodal RAG](#preprocessing-for-multimodal-rag)
+  - [Requirements](#requirements)
+  - [Notebooks](#notebooks)
+      - [1. Data Augmentation](#1-data-augmentation)
+      - [2. Storing embedded values in VectorDB](#2-storing-embedded-values-in-vectordb)
+      - [3. Vector Search](#3-vector-search)
+      - [4. Multimodal RAG Chatbot](#4-multimodal-rag-chatbot)
 
 ## Requirements
 
-1. [데이터셋](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-dataset) 준비
-   - 데이터 augmentation 없이, 생성되어 있는 [샘플 데이터](../data/product.csv)로 테스트 할 경우 skip 가능
-2. Bedrock에서 사용할 Model access
-3. OpenSearch Service 도메인 생성
-4. DynamoDB 테이블 생성
-5. `.env` 파일에 값 설정
+1. Prepare [dataset](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-dataset)
+   - If testing with the pre-generated [sample data](../data/product.csv) without data augmentation, this step can be skipped
+2. Access the model to be used in Bedrock
+3. Create OpenSearch Service domain
+4. Create DynamoDB table
+5. Set values in the `.env` file
 
 ## Notebooks
 
-#### 1. [데이터 Augmentation](./1-augment-dataset.ipynb)
+#### 1. [Data Augmentation](./1-augment-dataset.ipynb)
 
-- JSON 파일로부터 상품을 관리하기 위한 추가적인 메타데이터(한글 상품명, 상품 요약, 이미지 설명글, 태그)와 상품 소개글을 생성합니다.
-- 생성된 데이터는 csv로 저장하고, csv 파일을 로드해서 DynamoDB에 저장합니다.
+- Generate additional metadata (Korean product name, product summary, image description, tags) and product introductions from JSON files to manage products.
+- Save the generated data as a CSV file, then load the CSV file and store it in DynamoDB.
 
 | Before Augmentation                 | After Augmentation                |
 |-------------------------------------|-----------------------------------|
 | ![Before](../assets/before-aug.png) | ![After](../assets/after-aug.png) |
 
-#### 2. [VectorDB에 Embedding한 값 저장](./2-embedding.ipynb)
+#### 2. [Storing embedded values in VectorDB](./2-embedding.ipynb)
 
 ```mermaid
 graph LR
@@ -29,7 +37,7 @@ graph LR
     C[\text summary\]:::descStyle
     D[\description\]:::descStyle
     E[\image summary\]:::descStyle
-    
+
     A --> F[[Multimodal Embedding]]:::multiEmbeddingStyle
     B --> F[[Multimodal Embedding]]:::multiEmbeddingStyle
     C --> G[[Text Embedding]]:::textEmbeddingStyle
@@ -46,10 +54,11 @@ graph LR
     classDef outputStyle fill:#F08D2B,stroke:#FFFFFF,stroke-width:2px,color:#000000;
 ```
 
-#### 3. [Vector Search 테스트](./3-vector-search.ipynb)
+#### 3. [Vector Search](./3-vector-search.ipynb)
 
-- Multimodal Embedding, Text Embedding 별로 쿼리에 따른 검색 결과를 확인합니다.
-- Query를 항상 Multimodal Embedding
+Check search results for queries using both Multimodal Embedding and Text Embedding.
+
+- Always use Multimodal Embedding for queries.
 
 ```mermaid
 graph LR
@@ -60,14 +69,14 @@ graph LR
     E --> F[[Multimodal Embedding]]:::multiEmbeddingStyle
 
     F --> H[(product-image)]:::outputStyle
-    
+
     classDef imageStyle fill:#B090F3,stroke:#E6E6FA,stroke-width:2px,color:#000000;
     classDef descStyle fill:#87CAF0,stroke:#E6E6FA,stroke-width:2px,color:#000000;
     classDef multiEmbeddingStyle fill:#FFA500,stroke:#F08D2B,stroke-width:2px,color:#000000;
     classDef outputStyle fill:#F08D2B,stroke:#FFFFFF,stroke-width:2px,color:#000000;
 ```
 
-- Query를 항상 Text Embedding
+- Always use Text Embedding for queries.
 
 ```mermaid
 graph LR
@@ -87,7 +96,7 @@ graph LR
     classDef outputStyle fill:#F08D2B,stroke:#FFFFFF,stroke-width:2px,color:#000000;
 ```
 
-- Query가 텍스트인 경우 Text Embedding, 이미지를 포함한 경우 Multimodal Embedding
+- Use Text Embedding when the query is text-only, and Multimodal Embedding when the query includes images.
 
 ```mermaid
 graph LR
@@ -107,6 +116,6 @@ graph LR
     classDef outputStyle fill:#F08D2B,stroke:#FFFFFF,stroke-width:2px,color:#000000;
 ```
 
-#### 4. [Multimodal RAG 챗봇 테스트](./4-chatbot.ipynb)
+#### 4. [Multimodal RAG Chatbot](./4-chatbot.ipynb)
 
-대화 기록, RAG를 위한 Retrieval, Prompt를 추가해 Multimodal LLM과 연속적인 대화를 수행합니다.
+Perform continuous conversations with the Multimodal LLM by adding conversation history, retrieval and prompts.
